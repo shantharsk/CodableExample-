@@ -1,0 +1,31 @@
+{
+    "Json": [
+        {
+            "firstname": "Shantha",
+            "lastname": "Kumar",
+            "age": 24,
+            "job_information": {
+                "title": "iOS Developer",
+                "salary": 5000
+            }
+        },
+        {
+            "firstname": "Ranjith",
+            "lastname": "Kumar",
+            "age": 24,
+            "job_information": {
+                "title": "iOS Developer",
+                "salary": 6000
+            }
+        },
+        {
+            "firstname": "Boomi",
+            "lastname": "Nathan",
+            "age": 26,
+            "job_information": {
+                "title": "iOS Developer",
+                "salary": 7000
+            }
+        }
+    ]
+}
