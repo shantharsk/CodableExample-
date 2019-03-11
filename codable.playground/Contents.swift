@@ -41,7 +41,7 @@ struct Json : Decodable {
         case corporate = "corporate"
     }
     
-    struct People : Codable {
+    struct People : Decodable {
         let job : JobInfo
         let firstname : String
         let lastname : String
