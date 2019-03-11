@@ -1,4 +1,5 @@
 import UIKit
+import Foundation
 
 
 func readJSONFile(path : String) -> Data?  {
@@ -19,6 +20,12 @@ func readJSONFile(path : String) -> Data?  {
     }
     
     return jsonData
+}
+
+
+func decode<T: Decodable>(data: Data) throws -> T {
+    let decoder = JSONDecoder()
+    return try decoder.decode(T.self, from: data)
 }
 
 struct Json : Codable {
@@ -59,12 +66,11 @@ struct Json : Codable {
 
 
 if let json = readJSONFile(path: "Job") {
-    let personObject = try JSONDecoder().decode(Json.self, from: json)
     
-    for jb in personObject.jobs {
+    let presonObj : Json = try decode(data: json)
+    for jb in presonObj.jobs {
         print(jb.firstname)
-        print(jb.job.salary)
+        print(jb.job.salary as Any)
     }
-
 }
 
