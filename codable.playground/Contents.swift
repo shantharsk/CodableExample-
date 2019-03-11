@@ -1,21 +1,15 @@
 import UIKit
 import Foundation
 
+fileprivate class BundleTargetingClass {}
 
 func readJSONFile(path : String) -> Data?  {
     
-    guard let pathString = Bundle.main.path(forResource: path, ofType: "json") else {
-        print("UnitTestData.json not found")
+    guard let filePath = Bundle(for: BundleTargetingClass.self).url(forResource: path, withExtension: "json") else {
         return nil
     }
     
-    guard let jsonString = try? NSString(contentsOfFile: pathString, encoding: String.Encoding.utf8.rawValue) else {
-        print("Unable to convert UnitTestData.json to String")
-        return nil
-    }
-    
-    guard let jsonData = jsonString.data(using: String.Encoding.utf8.rawValue) else {
-        print("Unable to convert UnitTestData.json to NSData")
+    guard let jsonData = try? Data(contentsOf: filePath, options: .mappedIfSafe) else {
         return nil
     }
     
@@ -38,7 +32,7 @@ func decode<T: Decodable>(data: Data) -> (decodeObj : T?, error : Error?) {
     return (decodeObj, de_Error)
 }
 
-struct Json : Codable {
+struct Json : Decodable {
     let peoples : [People]
     let corporate : [Corporate]
     
@@ -48,7 +42,7 @@ struct Json : Codable {
     }
     
     struct People : Codable {
-        let job : Job_Info
+        let job : JobInfo
         let firstname : String
         let lastname : String
         let age : Int
@@ -59,13 +53,9 @@ struct Json : Codable {
         }
     }
     
-    struct Job_Info : Codable {
+    struct JobInfo : Codable {
         let title : String
         let salary : Int?
-        
-        enum CodingKeys: String, CodingKey {
-            case title, salary
-        }
         
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -80,10 +70,6 @@ struct Json : Codable {
         let name : String
         let address : String
         let isMNC : Bool
-        
-        enum CodingKeys: String, CodingKey {
-            case name, address, isMNC
-        }
         
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
