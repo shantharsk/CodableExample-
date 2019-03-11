@@ -1,5 +1,5 @@
 {
-    "Json": [
+    "people": [
         {
             "firstname": "Shantha",
             "lastname": "Kumar",
@@ -26,6 +26,23 @@
                 "title": "iOS Developer",
                 "salary": 7000
             }
+        }
+    ],
+    "corporate": [
+        {
+            "name": "capgemini",
+            "address": "Whitefield",
+            "isMNC": true
+        },
+        {
+            "name": "sonata",
+            "address": "Koramangala",
+            "isMNC": false
+        },
+        {
+            "name": "TCS",
+            "address": "Yeshwanthpur",
+            "isMNC": true
         }
     ]
 }

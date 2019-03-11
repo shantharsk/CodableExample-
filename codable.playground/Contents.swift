@@ -23,19 +23,31 @@ func readJSONFile(path : String) -> Data?  {
 }
 
 
-func decode<T: Decodable>(data: Data) throws -> T {
+func decode<T: Decodable>(data: Data) -> (decodeObj : T?, error : Error?) {
+    
+    var decodeObj : T? = nil
+    var de_Error : Error? = nil
     let decoder = JSONDecoder()
-    return try decoder.decode(T.self, from: data)
+    
+    do {
+        decodeObj = try decoder.decode(T.self, from: data)
+    } catch {
+        de_Error = error
+    }
+    
+    return (decodeObj, de_Error)
 }
 
 struct Json : Codable {
-    let jobs : [Person]
+    let peoples : [People]
+    let corporate : [Corporate]
     
     enum CodingKeys: String, CodingKey {
-        case jobs = "Json"
+        case peoples = "people"
+        case corporate = "corporate"
     }
     
-    struct Person : Codable {
+    struct People : Codable {
         let job : Job_Info
         let firstname : String
         let lastname : String
@@ -62,15 +74,48 @@ struct Json : Codable {
         }
         
     }
+    
+    
+    struct Corporate : Codable {
+        let name : String
+        let address : String
+        let isMNC : Bool
+        
+        enum CodingKeys: String, CodingKey {
+            case name, address, isMNC
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            name = try container.decode(String.self, forKey: .name)
+            address = try container.decode(String.self, forKey: .address)
+            isMNC = try container.decode(Bool.self, forKey: .isMNC)
+        }
+        
+    }
+    
 }
 
 
 if let json = readJSONFile(path: "Job") {
     
-    let presonObj : Json = try decode(data: json)
-    for jb in presonObj.jobs {
-        print(jb.firstname)
-        print(jb.job.salary as Any)
+    let presonObj : (Json?, Error?) = decode(data: json)
+    
+    if let jb = presonObj.0 {
+        for jb in jb.peoples{
+            print(jb.firstname)
+            print(jb.job.salary as Any)
+        }
+        
+        for cr in jb.corporate {
+            print(cr.name)
+            print(cr.address)
+            print(cr.isMNC)
+        }
+        
+    } else {
+        print(presonObj.1?.localizedDescription)
     }
+    
 }
 
